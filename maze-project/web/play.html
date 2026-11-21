@@ -1,0 +1,24 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Play - MazeRunner</title><link rel="stylesheet" href="style.css"></head><body><nav><b>🧭 MazeRunner</b><a href="index.html" id="n1">Home</a><a href="play.html" id="n2">Play</a><a href="solver.html" id="n3">Solver</a><a href="scores.html" id="n4">Scores</a><a href="about.html" id="n5">About</a></nav><main>
+<h1>Play</h1>
+<div class="card"><select id="lv"></select><button id="undo" class="alt">↶ Undo</button><button id="hint" class="alt">💡 Hint</button><button id="reset" class="alt">Restart</button>
+<div class="stats"><span>Moves: <b id="mv">0</b></span><span>Time: <b id="tm">0</b>s</span><span>Optimal: <b id="op">0</b></span></div>
+<p id="msg" class="win"></p><canvas id="cv"></canvas><p style="color:var(--muted)">Arrow keys / WASD to move. Reach the green square.</p></div>
+</main><script>document.getElementById("n2").classList.add("on")</script><script src="levels.js"></script><script src="common.js"></script><script>
+const sel=document.getElementById("lv"),cv=document.getElementById("cv");
+LEVELS.forEach((l,i)=>sel.add(new Option(l.name+" ("+l.w+"x"+l.h+")",i)));
+let L,pos,hist,moves,t0,timer,hint=null,won=false;
+function start(){L=LEVELS[sel.value];pos=[0,0];hist=[];moves=0;won=false;hint=null;t0=Date.now();clearInterval(timer);
+ timer=setInterval(()=>{if(!won)tm.textContent=Math.floor((Date.now()-t0)/1000)},500);
+ op.textContent=L.shortest;msg.textContent="";mv.textContent=0;tm.textContent=0;draw();}
+function draw(){drawMaze(cv,L,{player:pos,path:hint});mv.textContent=moves;}
+function move(b){if(won)return;const c=L.cells[pos[1]*L.w+pos[0]];if(!(c&b))return;
+ hist.push(pos.slice());pos=[pos[0]+DX[b],pos[1]+DY[b]];moves++;hint=null;draw();
+ if(pos[0]==L.w-1&&pos[1]==L.h-1){won=true;const t=Math.floor((Date.now()-t0)/1000);
+  msg.textContent="🎉 Solved in "+moves+" moves, "+t+"s!";
+  try{const s=JSON.parse(localStorage.getItem("mazeScores")||"[]");s.push({level:L.name,moves,time:t,opt:L.shortest,date:new Date().toLocaleDateString()});localStorage.setItem("mazeScores",JSON.stringify(s));}catch(e){}}}
+const keys={ArrowUp:1,w:1,ArrowRight:2,d:2,ArrowDown:4,s:4,ArrowLeft:8,a:8};
+addEventListener("keydown",e=>{const b=keys[e.key];if(b){e.preventDefault();move(b)}});
+undo.onclick=()=>{if(hist.length&&!won){pos=hist.pop();moves++;hint=null;draw()}};
+document.getElementById("hint").onclick=()=>{hint=bfsPath(L,pos[0],pos[1]);draw()};
+reset.onclick=sel.onchange=start;start();
+</script></body></html>

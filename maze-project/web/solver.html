@@ -1,0 +1,19 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Solver - MazeRunner</title><link rel="stylesheet" href="style.css"></head><body><nav><b>🧭 MazeRunner</b><a href="index.html" id="n1">Home</a><a href="play.html" id="n2">Play</a><a href="solver.html" id="n3">Solver</a><a href="scores.html" id="n4">Scores</a><a href="about.html" id="n5">About</a></nav><main>
+<h1>Algorithm Visualizer</h1>
+<div class="card"><select id="lv"></select><select id="alg"><option value="bfs">BFS (Queue)</option><option value="dfs">DFS (Stack)</option></select>
+<button id="go">▶ Run</button><button id="cmp" class="alt">Compare (from C)</button>
+<div class="stats"><span>Explored: <b id="ex">0</b></span><span>Path length: <b id="pl">-</b></span></div>
+<p id="info" style="color:var(--muted)"></p><canvas id="cv"></canvas>
+<p style="color:var(--muted)">Blue = explored, orange = frontier (queue/stack contents), green = final path.</p></div>
+</main><script>document.getElementById("n3").classList.add("on")</script><script src="levels.js"></script><script src="common.js"></script><script>
+const sel=document.getElementById("lv"),cv=document.getElementById("cv");let run=0;
+LEVELS.forEach((l,i)=>sel.add(new Option(l.name+" ("+l.w+"x"+l.h+")",i)));
+function show(){drawMaze(cv,LEVELS[sel.value]);ex.textContent=0;pl.textContent="-";}
+sel.onchange=()=>{run++;show()};
+go.onclick=()=>{const my=++run,L=LEVELS[sel.value],g=search(L,alg.value);
+ (function step(){if(my!=run)return;const r=g.next().value;if(!r)return;
+  drawMaze(cv,L,{visited:r.seen,front:r.front,path:r.path});ex.textContent=r.seen.size;
+  if(r.done){pl.textContent=r.path.length-1;return}setTimeout(step,L.w>16?5:30)})();};
+cmp.onclick=()=>{const L=LEVELS[sel.value];info.textContent="C program results for "+L.name+": shortest path = "+L.shortest+", BFS explored "+L.bfsVisited+" cells, DFS explored "+L.dfsVisited+" cells."};
+show();
+</script></body></html>

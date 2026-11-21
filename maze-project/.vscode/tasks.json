@@ -1,0 +1,4 @@
+{ "version": "2.0.0", "tasks": [
+ { "label": "Build C", "type": "shell", "command": "gcc -Wall -O2 maze.c -o maze", "options": {"cwd": "${workspaceFolder}/c"}, "group": "build" },
+ { "label": "Export levels to website", "type": "shell", "command": "./maze export ../web/levels.js", "options": {"cwd": "${workspaceFolder}/c"}, "dependsOn": "Build C" }
+]}

@@ -1,0 +1,10 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Scores - MazeRunner</title><link rel="stylesheet" href="style.css"></head><body><nav><b>🧭 MazeRunner</b><a href="index.html" id="n1">Home</a><a href="play.html" id="n2">Play</a><a href="solver.html" id="n3">Solver</a><a href="scores.html" id="n4">Scores</a><a href="about.html" id="n5">About</a></nav><main>
+<h1>Scores</h1><div class="card"><table><thead><tr><th>Level</th><th>Moves</th><th>Optimal</th><th>Time (s)</th><th>Date</th></tr></thead><tbody id="rows"></tbody></table>
+<p id="none" style="color:var(--muted)"></p><button id="clr" class="alt">Clear scores</button></div>
+</main><script>document.getElementById("n4").classList.add("on")</script><script>
+function load(){let s=[];try{s=JSON.parse(localStorage.getItem("mazeScores")||"[]")}catch(e){}
+s.sort((a,b)=>a.moves-b.moves||a.time-b.time);
+rows.innerHTML=s.map(r=>"<tr><td>"+r.level+"</td><td>"+r.moves+"</td><td>"+r.opt+"</td><td>"+r.time+"</td><td>"+r.date+"</td></tr>").join("");
+none.textContent=s.length?"":"No games yet - go play!";}
+clr.onclick=()=>{localStorage.removeItem("mazeScores");load()};load();
+</script></body></html>

@@ -1,0 +1,11 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>About - MazeRunner</title><link rel="stylesheet" href="style.css"></head><body><nav><b>🧭 MazeRunner</b><a href="index.html" id="n1">Home</a><a href="play.html" id="n2">Play</a><a href="solver.html" id="n3">Solver</a><a href="scores.html" id="n4">Scores</a><a href="about.html" id="n5">About</a></nav><main>
+<h1>About the Project</h1>
+<div class="card"><h3>Data structures used</h3><table>
+<tr><th>Structure</th><th>Where</th></tr>
+<tr><td>Stack (array)</td><td>Maze generation (recursive backtracker), DFS solver, rebuilding the shortest path, Undo in the game</td></tr>
+<tr><td>Queue (linked list)</td><td>BFS shortest-path solver</td></tr>
+<tr><td>2D array + bitmask</td><td>Maze grid: each cell stores open passages N=1, E=2, S=4, W=8</td></tr>
+<tr><td>Parent array</td><td>Backtracking from goal to start to get the path</td></tr></table></div>
+<div class="card"><h3>Complexity</h3><p>Generation, BFS and DFS are all <code>O(V + E)</code> = <code>O(w·h)</code> for a w×h maze. BFS guarantees the shortest path; DFS may explore more cells.</p></div>
+<div class="card"><h3>How it fits together</h3><p><code>c/maze.c</code> generates 5 mazes and writes <code>web/levels.js</code>. The website pages read that file to play and visualize them.</p></div>
+</main><script>document.getElementById("n5").classList.add("on")</script></body></html>
